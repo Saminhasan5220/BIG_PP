@@ -7,13 +7,15 @@ from UI import *
 class Client:
     sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    def __init__(self,ip='192.168.1.7',port=10000):
+    def __init__(self,ip='192.168.1.5',port=10000):
         self.ip = ip
         self.port = port
         self.running = True
         self.rdata = None
         self.control_command = (0,0)
         #self.sent_data = None
+    def scale( x,  in_min,  in_max,  out_min,  out_max):
+        return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
 
     def run(self):
 
@@ -47,10 +49,10 @@ class Client:
                 if not data:
                     print("not data")
                     break
-                print(self.rdata,type(self.rdata))
+                #print(self.rdata,type(self.rdata))
                 self.rdata = tuple(data.decode('utf-8').split(','))
                 
-                #print("From Server to Client =>",self.rdata,type(self.rdata),len(self.rdata))
+                print("From Server to Client =>",self.rdata,type(self.rdata),len(self.rdata))
             except ConnectionResetError or ConnectionAbortedError:
                 print("Server Disconnected")
                 self.running =False
@@ -95,3 +97,5 @@ try:
     client.run()
 except KeyboardInterrupt:
     pass
+    
+
